@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Autos disponibles</title>
+</head>
+<body>
+  <h1>Autos desde APEX</h1>
+
+  <button onclick="cargarAutos()">Cargar autos</button>
+
+  <ul id="listaAutos"></ul>
+
+  <script>
+    const API_URL = "https://oracleapex.com/ords/tbdandres/alquiler/autos/";
+
+    async function cargarAutos() {
+  const lista = document.getElementById("listaAutos");
+  lista.innerHTML = "Cargando...";
+
+  try {
+    const res = await fetch(API_URL);
+    console.log(res);
+
+    const data = await res.json();
+    console.log(data);
+
+    lista.innerHTML = "";
+
+    data.items.forEach(auto => {
+      const li = document.createElement("li");
+      li.textContent = `${auto.marca} ${auto.modelo}`;
+      lista.appendChild(li);
+    });
+
+  } catch (error) {
+    console.error("ERROR:", error);
+    lista.innerHTML = "Error al cargar autos";
+  }
+}
+  </script>
+</body>
+</html>
