@@ -354,7 +354,8 @@
     // En GitHub Pages no se ejecuta api/autos.js. Si publicas este proyecto
     // en Vercel, podes pegar aca esa URL completa para que Pages la use:
     // const DEPLOYED_PROXY_URL = "https://tu-proyecto.vercel.app/api/autos";
-    const DEPLOYED_PROXY_URL = "";
+    const DEPLOYED_PROXY_URL = "https://alquiler-front-alpha.vercel.app/api/autos";
+
 
     const refreshButton = document.getElementById("refreshButton");
     const statusBox = document.getElementById("status");
@@ -397,10 +398,6 @@
       const errores = [];
       const endpoints = obtenerEndpoints();
 
-      if (!endpoints.length) {
-        throw new Error("Estas en GitHub Pages. Pega una URL de Vercel/Netlify en DEPLOYED_PROXY_URL o habilita CORS en Oracle APEX.");
-      }
-
       for (const endpoint of endpoints) {
         try {
           const response = await fetchConTimeout(endpoint.url, 9000);
@@ -430,9 +427,9 @@
         endpoints.push({ name: "proxy publicado", url: DEPLOYED_PROXY_URL });
       }
 
-      if (!esGitHubPages) {
-        endpoints.push({ name: "Oracle APEX directo", url: APEX_AUTOS_URL });
+      endpoints.push({ name: "Oracle APEX directo", url: APEX_AUTOS_URL });
 
+      if (!esGitHubPages) {
         if (!esLocal) {
           endpoints.push({ name: "proxy /api/autos", url: "/api/autos" });
         }
