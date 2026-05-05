@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/autos",
+      "destination": "/api/autos.js"
+    }
+  ]
+}

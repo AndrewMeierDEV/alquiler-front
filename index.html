@@ -351,8 +351,8 @@
   <script>
     const APEX_AUTOS_URL = "https://oracleapex.com/ords/tbdandres/alquiler/autos/";
 
-    // En GitHub Pages no se ejecuta api/autos.js. Si publicas ese proxy en
-    // Vercel/Netlify, pega aca la URL completa, por ejemplo:
+    // En GitHub Pages no se ejecuta api/autos.js. Si publicas este proyecto
+    // en Vercel, podes pegar aca esa URL completa para que Pages la use:
     // const DEPLOYED_PROXY_URL = "https://tu-proyecto.vercel.app/api/autos";
     const DEPLOYED_PROXY_URL = "";
 
@@ -426,8 +426,8 @@
         endpoints.push({ name: "proxy publicado", url: DEPLOYED_PROXY_URL });
       }
 
-      if (esLocal) {
-        endpoints.push({ name: "proxy local /api/autos", url: "/api/autos" });
+      if (!esGitHubPages || esLocal) {
+        endpoints.push({ name: "proxy /api/autos", url: "/api/autos" });
       }
 
       endpoints.push({ name: "Oracle APEX directo", url: APEX_AUTOS_URL });
