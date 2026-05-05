@@ -397,6 +397,10 @@
       const errores = [];
       const endpoints = obtenerEndpoints();
 
+      if (!endpoints.length) {
+        throw new Error("Estas en GitHub Pages. Pega una URL de Vercel/Netlify en DEPLOYED_PROXY_URL o habilita CORS en Oracle APEX.");
+      }
+
       for (const endpoint of endpoints) {
         try {
           const response = await fetchConTimeout(endpoint.url, 9000);
@@ -426,13 +430,17 @@
         endpoints.push({ name: "proxy publicado", url: DEPLOYED_PROXY_URL });
       }
 
-      if (!esGitHubPages || esLocal) {
-        endpoints.push({ name: "proxy /api/autos", url: "/api/autos" });
-      }
-
-      endpoints.push({ name: "Oracle APEX directo", url: APEX_AUTOS_URL });
-
       if (!esGitHubPages) {
+        endpoints.push({ name: "Oracle APEX directo", url: APEX_AUTOS_URL });
+
+        if (!esLocal) {
+          endpoints.push({ name: "proxy /api/autos", url: "/api/autos" });
+        }
+
+        if (esLocal) {
+          endpoints.push({ name: "proxy local /api/autos", url: "/api/autos" });
+        }
+
         endpoints.push({
           name: "AllOrigins",
           url: `https://api.allorigins.win/raw?url=${encodeURIComponent(APEX_AUTOS_URL)}`
