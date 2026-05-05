@@ -3,336 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autos disponibles</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f4f7fb;
-      --surface: #ffffff;
-      --surface-soft: #eef4fb;
-      --text: #172033;
-      --muted: #64748b;
-      --line: #d9e2ef;
-      --accent: #0f766e;
-      --accent-dark: #115e59;
-      --danger: #b42318;
-      --warning: #a15c07;
-      --success: #157347;
-      --shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    .app {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 40px 0;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .eyebrow {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1;
-      letter-spacing: 0;
-    }
-
-    .subtitle {
-      max-width: 620px;
-      margin: 14px 0 0;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: 0;
-      border-radius: 8px;
-      background: var(--accent);
-      color: #fff;
-      cursor: pointer;
-      font: inherit;
-      font-weight: 750;
-      min-height: 44px;
-      padding: 0 18px;
-      transition: background 160ms ease, transform 160ms ease;
-    }
-
-    button:hover {
-      background: var(--accent-dark);
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      cursor: wait;
-      opacity: 0.7;
-      transform: none;
-    }
-
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 48px;
-      margin-bottom: 20px;
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
-      color: var(--muted);
-    }
-
-    .status strong {
-      color: var(--text);
-    }
-
-    .status.error {
-      border-color: #f3b8b1;
-      background: #fff7f6;
-      color: var(--danger);
-    }
-
-    .status.success {
-      border-color: #b7dfcb;
-      background: #f2fbf6;
-      color: var(--success);
-    }
-
-    .status.info {
-      border-color: #b8cceb;
-      background: #f6f9ff;
-      color: #285c9a;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      flex: 0 0 auto;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .metric {
-      min-height: 92px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-    }
-
-    .metric span {
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 700;
-    }
-
-    .metric strong {
-      display: block;
-      margin-top: 8px;
-      font-size: 1.85rem;
-      line-height: 1;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-
-    .car-card {
-      display: grid;
-      gap: 18px;
-      min-height: 250px;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-    }
-
-    .car-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .brand {
-      margin: 0;
-      font-size: 1.35rem;
-      line-height: 1.2;
-    }
-
-    .model {
-      margin: 5px 0 0;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .badge {
-      flex: 0 0 auto;
-      border-radius: 999px;
-      padding: 6px 10px;
-      background: var(--surface-soft);
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: capitalize;
-    }
-
-    .badge.disponible {
-      background: #e7f7ed;
-      color: var(--success);
-    }
-
-    .badge.en_taller {
-      background: #fff4df;
-      color: var(--warning);
-    }
-
-    .details {
-      display: grid;
-      gap: 10px;
-      margin: 0;
-    }
-
-    .detail-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .detail-row dt {
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 700;
-    }
-
-    .detail-row dd {
-      margin: 0;
-      text-align: right;
-      font-weight: 800;
-    }
-
-    .price {
-      align-self: end;
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      padding-top: 2px;
-    }
-
-    .price span {
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 700;
-    }
-
-    .price strong {
-      font-size: 1.55rem;
-      line-height: 1;
-    }
-
-    .empty {
-      grid-column: 1 / -1;
-      padding: 28px;
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      color: var(--muted);
-      text-align: center;
-      font-weight: 700;
-    }
-
-    @media (max-width: 760px) {
-      .app {
-        width: min(100% - 20px, 1120px);
-        padding: 24px 0;
-      }
-
-      .topbar {
-        display: grid;
-        align-items: start;
-      }
-
-      .summary {
-        grid-template-columns: 1fr;
-      }
-
-      .actions,
-      button {
-        width: 100%;
-      }
-    }
-  </style>
+  <title>Alquiler de autos</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <main class="app">
     <section class="topbar">
       <div>
         <p class="eyebrow">Oracle APEX</p>
-        <h1>Autos disponibles</h1>
-        <p class="subtitle">Consulta en vivo del endpoint de alquiler para ver unidades, patentes, estados y precio diario.</p>
+        <h1>Alquiler de autos</h1>
+        <p class="subtitle">Dos vistas para el flujo completo: usuarios alquilando autos y administración cargando datos operativos en la base.</p>
       </div>
       <div class="actions">
-        <button id="refreshButton" type="button">Actualizar autos</button>
+        <button id="refreshButton" type="button">Actualizar datos</button>
       </div>
     </section>
+
+    <nav class="tabs" aria-label="Vistas">
+      <button class="tab-button active" type="button" data-view="usuario">Usuario</button>
+      <button class="tab-button" type="button" data-view="admin">Administrador</button>
+    </nav>
 
     <div id="status" class="status" role="status" aria-live="polite">
       <span class="dot"></span>
       <span>Listo para consultar la API.</span>
     </div>
 
-    <section class="summary" aria-label="Resumen de autos">
+    <section class="summary" aria-label="Resumen">
       <article class="metric">
-        <span>Total</span>
+        <span>Total autos</span>
         <strong id="totalAutos">0</strong>
       </article>
       <article class="metric">
@@ -340,211 +39,213 @@
         <strong id="autosDisponibles">0</strong>
       </article>
       <article class="metric">
+        <span>Alquileres activos</span>
+        <strong id="alquileresActivos">0</strong>
+      </article>
+      <article class="metric">
         <span>Precio promedio</span>
         <strong id="precioPromedio">$0</strong>
       </article>
     </section>
 
-    <section id="autosGrid" class="grid" aria-label="Listado de autos"></section>
+    <section id="usuarioView" class="view active">
+      <div class="section-head">
+        <div>
+          <h2>Elegí tu auto</h2>
+          <p>Mostramos primero los autos disponibles. Seleccioná una unidad y completá los datos del alquiler.</p>
+        </div>
+      </div>
+
+      <div class="catalog">
+        <section id="autosGrid" class="grid" aria-label="Listado de autos"></section>
+
+        <aside class="panel sticky">
+          <h3>Solicitud de alquiler</h3>
+          <p id="selectedCar" class="selected-car">Seleccioná un auto disponible para empezar.</p>
+
+          <form id="alquilerForm" class="form-grid">
+            <input id="alquilerIdAuto" name="id_auto" type="hidden">
+
+            <label>
+              ID cliente
+              <input name="id_cliente" type="number" min="1" placeholder="Ej: 1" required>
+            </label>
+
+            <div class="form-grid two">
+              <label>
+                Fecha inicio
+                <input name="fecha_inicio" type="date" required>
+              </label>
+              <label>
+                Devolución prevista
+                <input name="fecha_devolucion_prevista" type="date" required>
+              </label>
+            </div>
+
+            <button id="submitAlquiler" type="submit" disabled>Confirmar alquiler</button>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section id="adminView" class="view">
+      <div class="section-head">
+        <div>
+          <h2>Backoffice</h2>
+          <p>Alta rápida de autos, clientes y alquileres. Requiere que existan los templates REST en ORDS.</p>
+        </div>
+      </div>
+
+      <div class="admin-layout">
+        <article class="panel">
+          <h3>Cargar auto</h3>
+          <form id="autoForm" class="form-grid">
+            <label>
+              Marca
+              <input name="marca" placeholder="Ford" required>
+            </label>
+            <label>
+              Modelo
+              <input name="modelo" placeholder="Ka" required>
+            </label>
+            <label>
+              Patente
+              <input name="patente" placeholder="AA123BB" required>
+            </label>
+            <div class="form-grid two">
+              <label>
+                Estado
+                <select name="estado" required>
+                  <option value="disponible">Disponible</option>
+                  <option value="en_taller">En taller</option>
+                  <option value="alquilado">Alquilado</option>
+                </select>
+              </label>
+              <label>
+                Precio día
+                <input name="precio_dia" type="number" min="0" step="1" required>
+              </label>
+            </div>
+            <button type="submit">Guardar auto</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h3>Cargar cliente</h3>
+          <form id="clienteForm" class="form-grid">
+            <div class="form-grid two">
+              <label>
+                Nombre
+                <input name="nombre" required>
+              </label>
+              <label>
+                Apellido
+                <input name="apellido" required>
+              </label>
+            </div>
+            <label>
+              DNI
+              <input name="dni" required>
+            </label>
+            <label>
+              Email
+              <input name="email" type="email">
+            </label>
+            <label>
+              Teléfono
+              <input name="telefono">
+            </label>
+            <button type="submit">Guardar cliente</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h3>Cargar alquiler</h3>
+          <form id="adminAlquilerForm" class="form-grid">
+            <div class="form-grid two">
+              <label>
+                ID cliente
+                <input name="id_cliente" type="number" min="1" required>
+              </label>
+              <label>
+                ID auto
+                <input name="id_auto" type="number" min="1" required>
+              </label>
+            </div>
+            <div class="form-grid two">
+              <label>
+                Fecha inicio
+                <input name="fecha_inicio" type="date" required>
+              </label>
+              <label>
+                Devolución prevista
+                <input name="fecha_devolucion_prevista" type="date" required>
+              </label>
+            </div>
+            <label>
+              Estado
+              <select name="estado" required>
+                <option value="activo">Activo</option>
+                <option value="finalizado">Finalizado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </label>
+            <button type="submit">Guardar alquiler</button>
+          </form>
+        </article>
+      </div>
+
+      <article class="panel table-panel">
+        <div class="section-head">
+          <div>
+            <h3>Autos</h3>
+            <p>Datos actuales del endpoint de autos.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Patente</th>
+                <th>Estado</th>
+                <th>Precio día</th>
+              </tr>
+            </thead>
+            <tbody id="autosTableBody"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel table-panel">
+        <div class="section-head">
+          <div>
+            <h3>Alquileres</h3>
+            <p>Si el endpoint `/alquileres/` está publicado, se listan acá.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Auto</th>
+                <th>Inicio</th>
+                <th>Prevista</th>
+                <th>Real</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="alquileresTableBody"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
   </main>
 
-  <script>
-    const APEX_AUTOS_URL = "https://oracleapex.com/ords/tbdandres/alquiler/autos/";
-
-    // En GitHub Pages no se ejecuta api/autos.js. Si publicas este proyecto
-    // en Vercel, podes pegar aca esa URL completa para que Pages la use:
-    // const DEPLOYED_PROXY_URL = "https://tu-proyecto.vercel.app/api/autos";
-    const DEPLOYED_PROXY_URL = "https://alquiler-front-alpha.vercel.app/api/autos";
-
-
-    const refreshButton = document.getElementById("refreshButton");
-    const statusBox = document.getElementById("status");
-    const autosGrid = document.getElementById("autosGrid");
-    const totalAutos = document.getElementById("totalAutos");
-    const autosDisponibles = document.getElementById("autosDisponibles");
-    const precioPromedio = document.getElementById("precioPromedio");
-
-    const moneyFormatter = new Intl.NumberFormat("es-AR", {
-      style: "currency",
-      currency: "ARS",
-      maximumFractionDigits: 0
-    });
-
-    async function cargarAutos() {
-      setLoading(true);
-      setStatus("Consultando autos...", "loading");
-
-      try {
-        const { autos, source } = await obtenerAutos();
-        pintarResumen(autos);
-        pintarAutos(autos);
-        setStatus(`Se cargaron ${autos.length} autos desde ${source}.`, "success");
-      } catch (error) {
-        console.error("ERROR:", error);
-        pintarResumen([]);
-        autosGrid.innerHTML = `
-          <div class="empty">
-            No se pudieron cargar los autos. En GitHub Pages necesitás habilitar CORS en Oracle APEX
-            o usar un proxy propio publicado en Vercel/Netlify.
-          </div>
-        `;
-        setStatus(error.message || "Error al cargar autos.", "error");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function obtenerAutos() {
-      const errores = [];
-      const endpoints = obtenerEndpoints();
-
-      for (const endpoint of endpoints) {
-        try {
-          const response = await fetchConTimeout(endpoint.url, 9000);
-
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-
-          const data = await response.json();
-          const autos = Array.isArray(data.items) ? data.items : [];
-          return { autos, source: endpoint.name };
-        } catch (error) {
-          errores.push(`${endpoint.name}: ${formatearErrorFetch(error)}`);
-        }
-      }
-
-      throw new Error(`No se pudo leer la API. ${errores.join(" | ")}`);
-    }
-
-    function obtenerEndpoints() {
-      const endpoints = [];
-      const host = window.location.hostname;
-      const esLocal = host === "localhost" || host === "127.0.0.1" || host === "";
-      const esGitHubPages = host.endsWith("github.io");
-
-      if (DEPLOYED_PROXY_URL) {
-        endpoints.push({ name: "proxy publicado", url: DEPLOYED_PROXY_URL });
-      }
-
-      endpoints.push({ name: "Oracle APEX directo", url: APEX_AUTOS_URL });
-
-      if (!esGitHubPages) {
-        if (!esLocal) {
-          endpoints.push({ name: "proxy /api/autos", url: "/api/autos" });
-        }
-
-        if (esLocal) {
-          endpoints.push({ name: "proxy local /api/autos", url: "/api/autos" });
-        }
-
-        endpoints.push({
-          name: "AllOrigins",
-          url: `https://api.allorigins.win/raw?url=${encodeURIComponent(APEX_AUTOS_URL)}`
-        });
-      }
-
-      return endpoints;
-    }
-
-    async function fetchConTimeout(url, timeoutMs) {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), timeoutMs);
-
-      try {
-        return await fetch(url, {
-          signal: controller.signal,
-          headers: { "Accept": "application/json" }
-        });
-      } finally {
-        clearTimeout(timeout);
-      }
-    }
-
-    function formatearErrorFetch(error) {
-      if (error.name === "AbortError") {
-        return "agotó el tiempo de espera";
-      }
-
-      if (error.message === "Failed to fetch") {
-        return "bloqueado por CORS o sin conexión";
-      }
-
-      return error.message;
-    }
-
-    function pintarResumen(autos) {
-      const disponibles = autos.filter(auto => auto.estado === "disponible").length;
-      const promedio = autos.length
-        ? autos.reduce((total, auto) => total + Number(auto.precio_dia || 0), 0) / autos.length
-        : 0;
-
-      totalAutos.textContent = autos.length;
-      autosDisponibles.textContent = disponibles;
-      precioPromedio.textContent = moneyFormatter.format(promedio);
-    }
-
-    function pintarAutos(autos) {
-      if (!autos.length) {
-        autosGrid.innerHTML = '<div class="empty">La API respondió, pero no trajo autos para mostrar.</div>';
-        return;
-      }
-
-      autosGrid.innerHTML = autos.map(auto => `
-        <article class="car-card">
-          <div class="car-head">
-            <div>
-              <h2 class="brand">${escapeHTML(auto.marca || "Sin marca")}</h2>
-              <p class="model">${escapeHTML(auto.modelo || "Sin modelo")}</p>
-            </div>
-            <span class="badge ${escapeHTML(auto.estado || "")}">${formatearEstado(auto.estado)}</span>
-          </div>
-
-          <dl class="details">
-            <div class="detail-row">
-              <dt>Patente</dt>
-              <dd>${escapeHTML(auto.patente || "-")}</dd>
-            </div>
-            <div class="detail-row">
-              <dt>ID auto</dt>
-              <dd>#${escapeHTML(auto.id_auto ?? "-")}</dd>
-            </div>
-          </dl>
-
-          <div class="price">
-            <span>Por día</span>
-            <strong>${moneyFormatter.format(Number(auto.precio_dia || 0))}</strong>
-          </div>
-        </article>
-      `).join("");
-    }
-
-    function setStatus(message, type) {
-      const visibleType = ["success", "error", "info"].includes(type) ? type : "";
-      statusBox.className = `status ${visibleType}`;
-      statusBox.innerHTML = `<span class="dot"></span><span>${escapeHTML(message)}</span>`;
-    }
-
-    function setLoading(isLoading) {
-      refreshButton.disabled = isLoading;
-      refreshButton.textContent = isLoading ? "Cargando..." : "Actualizar autos";
-    }
-
-    function formatearEstado(estado) {
-      return String(estado || "sin estado").replaceAll("_", " ");
-    }
-
-    function escapeHTML(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    refreshButton.addEventListener("click", cargarAutos);
-    cargarAutos();
-  </script>
+  <script src="js/app.js" defer></script>
 </body>
 </html>

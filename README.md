@@ -1,36 +1,68 @@
-# Autos disponibles
+# Alquiler de autos
 
-Este front consume autos desde Oracle APEX.
+Front simple para Oracle APEX/ORDS con dos vistas:
 
-## Importante sobre GitHub Pages
+- Usuario: consulta autos disponibles y registra una solicitud de alquiler.
+- Administrador: backoffice para cargar autos, clientes y alquileres.
 
-GitHub Pages solo sirve archivos estaticos. No ejecuta `api/autos.js`, por eso `/api/autos` devuelve 404 en:
-
-```txt
-https://andrewmeierdev.github.io/alquiler-front/
-```
-
-Ademas, el navegador bloquea la llamada directa a Oracle APEX si el servicio no tiene CORS habilitado.
-
-## Opcion recomendada: Vercel
-
-1. Subi este repo a GitHub.
-2. Importalo en Vercel.
-3. Deploy.
-4. Abrí la URL de Vercel.
-
-En Vercel si funciona:
+## Estructura
 
 ```txt
-/api/autos -> api/autos.js -> Oracle APEX
+index.html       Estructura de la app
+css/styles.css   Estilos
+js/app.js        Logica de vistas, render y llamadas a ORDS
+api/autos.js     Proxy serverless para Vercel
 ```
 
-## Usar GitHub Pages con un proxy publicado
+## Endpoint base
 
-Si queres seguir usando GitHub Pages, publica el proxy en Vercel/Netlify y pega la URL en `index.html`:
+El front apunta a:
 
-```js
-const DEPLOYED_PROXY_URL = "https://tu-proyecto.vercel.app/api/autos";
+```txt
+https://oracleapex.com/ords/tbdandres/alquiler/
 ```
 
-Sin proxy publicado o sin CORS habilitado en Oracle APEX, GitHub Pages no puede consumir ese endpoint desde el navegador.
+## Templates REST necesarios
+
+Para que todo funcione, el modulo `alquiler_api` necesita estos templates:
+
+```txt
+autos/
+clientes/
+alquileres/
+```
+
+Metodos esperados:
+
+```txt
+GET  autos/
+POST autos/
+GET  clientes/
+POST clientes/
+GET  alquileres/
+POST alquileres/
+```
+
+`autos/` ya devuelve datos. Si `clientes/` o `alquileres/` todavia no existen en APEX, el front va a mostrar la vista pero no va a poder guardar esos formularios.
+
+## CORS
+
+El modulo REST debe permitir estos origenes:
+
+```txt
+https://alquiler-front-alpha.vercel.app,https://andrewmeierdev.github.io
+```
+
+SQL sugerido:
+
+```sql
+BEGIN
+  ORDS.SET_MODULE_ORIGINS_ALLOWED(
+    p_module_name     => 'alquiler_api',
+    p_origins_allowed => 'https://alquiler-front-alpha.vercel.app,https://andrewmeierdev.github.io'
+  );
+
+  COMMIT;
+END;
+/
+```
