@@ -12,16 +12,16 @@
       <div>
         <p class="eyebrow">Oracle APEX</p>
         <h1>Alquiler de autos</h1>
-        <p class="subtitle">Dos vistas para el flujo completo: usuarios alquilando autos y administración cargando datos operativos en la base.</p>
+        <p class="subtitle">Página para usuarios: consulta de autos disponibles y registro de solicitudes de alquiler.</p>
       </div>
       <div class="actions">
         <button id="refreshButton" type="button">Actualizar datos</button>
       </div>
     </section>
 
-    <nav class="tabs" aria-label="Vistas">
-      <button class="tab-button active" type="button" data-view="usuario">Usuario</button>
-      <button class="tab-button" type="button" data-view="admin">Administrador</button>
+    <nav class="tabs" aria-label="Paginas">
+      <a class="tab-button active" href="index.html">Usuario</a>
+      <a class="tab-button" href="admin.html">Administrador</a>
     </nav>
 
     <div id="status" class="status" role="status" aria-live="polite">
@@ -86,163 +86,6 @@
           </form>
         </aside>
       </div>
-    </section>
-
-    <section id="adminView" class="view">
-      <div class="section-head">
-        <div>
-          <h2>Backoffice</h2>
-          <p>Alta rápida de autos, clientes y alquileres. Requiere que existan los templates REST en ORDS.</p>
-        </div>
-      </div>
-
-      <div class="admin-layout">
-        <article class="panel">
-          <h3>Cargar auto</h3>
-          <form id="autoForm" class="form-grid">
-            <label>
-              Marca
-              <input name="marca" placeholder="Ford" required>
-            </label>
-            <label>
-              Modelo
-              <input name="modelo" placeholder="Ka" required>
-            </label>
-            <label>
-              Patente
-              <input name="patente" placeholder="AA123BB" required>
-            </label>
-            <div class="form-grid two">
-              <label>
-                Estado
-                <select name="estado" required>
-                  <option value="disponible">Disponible</option>
-                  <option value="en_taller">En taller</option>
-                  <option value="alquilado">Alquilado</option>
-                </select>
-              </label>
-              <label>
-                Precio día
-                <input name="precio_dia" type="number" min="0" step="1" required>
-              </label>
-            </div>
-            <button type="submit">Guardar auto</button>
-          </form>
-        </article>
-
-        <article class="panel">
-          <h3>Cargar cliente</h3>
-          <form id="clienteForm" class="form-grid">
-            <div class="form-grid two">
-              <label>
-                Nombre
-                <input name="nombre" required>
-              </label>
-              <label>
-                Apellido
-                <input name="apellido" required>
-              </label>
-            </div>
-            <label>
-              DNI
-              <input name="dni" required>
-            </label>
-            <label>
-              Email
-              <input name="email" type="email">
-            </label>
-            <label>
-              Teléfono
-              <input name="telefono">
-            </label>
-            <button type="submit">Guardar cliente</button>
-          </form>
-        </article>
-
-        <article class="panel">
-          <h3>Cargar alquiler</h3>
-          <form id="adminAlquilerForm" class="form-grid">
-            <div class="form-grid two">
-              <label>
-                ID cliente
-                <input name="id_cliente" type="number" min="1" required>
-              </label>
-              <label>
-                ID auto
-                <input name="id_auto" type="number" min="1" required>
-              </label>
-            </div>
-            <div class="form-grid two">
-              <label>
-                Fecha inicio
-                <input name="fecha_inicio" type="date" required>
-              </label>
-              <label>
-                Devolución prevista
-                <input name="fecha_devolucion_prevista" type="date" required>
-              </label>
-            </div>
-            <label>
-              Estado
-              <select name="estado" required>
-                <option value="activo">Activo</option>
-                <option value="finalizado">Finalizado</option>
-                <option value="cancelado">Cancelado</option>
-              </select>
-            </label>
-            <button type="submit">Guardar alquiler</button>
-          </form>
-        </article>
-      </div>
-
-      <article class="panel table-panel">
-        <div class="section-head">
-          <div>
-            <h3>Autos</h3>
-            <p>Datos actuales del endpoint de autos.</p>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Patente</th>
-                <th>Estado</th>
-                <th>Precio día</th>
-              </tr>
-            </thead>
-            <tbody id="autosTableBody"></tbody>
-          </table>
-        </div>
-      </article>
-
-      <article class="panel table-panel">
-        <div class="section-head">
-          <div>
-            <h3>Alquileres</h3>
-            <p>Si el endpoint `/alquileres/` está publicado, se listan acá.</p>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Auto</th>
-                <th>Inicio</th>
-                <th>Prevista</th>
-                <th>Real</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody id="alquileresTableBody"></tbody>
-          </table>
-        </div>
-      </article>
     </section>
   </main>
 

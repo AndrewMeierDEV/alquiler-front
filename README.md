@@ -1,16 +1,17 @@
 # Alquiler de autos
 
-Front simple para Oracle APEX/ORDS con dos vistas:
+Front simple para Oracle APEX/ORDS con dos paginas:
 
-- Usuario: consulta autos disponibles y registra una solicitud de alquiler.
-- Administrador: backoffice para cargar autos, clientes y alquileres.
+- `index.html` / `/usuario`: consulta autos disponibles y registra una solicitud de alquiler.
+- `admin.html` / `/admin`: backoffice para cargar autos, clientes y alquileres.
 
 ## Estructura
 
 ```txt
-index.html       Estructura de la app
-css/styles.css   Estilos
-js/app.js        Logica de vistas, render y llamadas a ORDS
+index.html       Pagina de usuario
+admin.html       Pagina de administrador
+css/styles.css   Estilos compartidos
+js/app.js        Render y llamadas a ORDS compartidos
 api/autos.js     Proxy serverless para Vercel
 ```
 

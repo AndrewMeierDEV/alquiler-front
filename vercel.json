@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/usuario",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
       "source": "/api/autos",
       "destination": "/api/autos.js"
     }

@@ -4,8 +4,7 @@
     const state = {
       autos: [],
       alquileres: [],
-      selectedAuto: null,
-      activeView: "usuario"
+      selectedAuto: null
     };
 
     const elements = {
@@ -149,13 +148,15 @@
         ? state.autos.reduce((total, auto) => total + Number(auto.precio_dia || 0), 0) / state.autos.length
         : 0;
 
-      elements.totalAutos.textContent = state.autos.length;
-      elements.autosDisponibles.textContent = disponibles;
-      elements.alquileresActivos.textContent = activos;
-      elements.precioPromedio.textContent = moneyFormatter.format(promedio);
+      setText(elements.totalAutos, state.autos.length);
+      setText(elements.autosDisponibles, disponibles);
+      setText(elements.alquileresActivos, activos);
+      setText(elements.precioPromedio, moneyFormatter.format(promedio));
     }
 
     function pintarAutosUsuario() {
+      if (!elements.autosGrid) return;
+
       const autosOrdenados = [...state.autos].sort((a, b) => {
         if (a.estado === "disponible" && b.estado !== "disponible") return -1;
         if (a.estado !== "disponible" && b.estado === "disponible") return 1;
@@ -204,6 +205,8 @@
     }
 
     function pintarAutosTabla() {
+      if (!elements.autosTableBody) return;
+
       if (!state.autos.length) {
         elements.autosTableBody.innerHTML = '<tr><td colspan="6">Sin autos para mostrar.</td></tr>';
         return;
@@ -222,6 +225,8 @@
     }
 
     function pintarAlquileresTabla() {
+      if (!elements.alquileresTableBody) return;
+
       if (!state.alquileres.length) {
         elements.alquileresTableBody.innerHTML = '<tr><td colspan="7">Sin alquileres publicados o endpoint pendiente.</td></tr>';
         return;
@@ -241,6 +246,8 @@
     }
 
     function pintarSeleccion() {
+      if (!elements.selectedCar || !elements.alquilerIdAuto || !elements.submitAlquiler) return;
+
       const auto = state.selectedAuto;
 
       if (!auto) {
@@ -261,7 +268,7 @@
     function seleccionarAuto(idAuto) {
       state.selectedAuto = state.autos.find(auto => String(auto.id_auto) === String(idAuto)) || null;
       pintarSeleccion();
-      elements.alquilerForm.scrollIntoView({ behavior: "smooth", block: "center" });
+      elements.alquilerForm?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     async function handleAlquilerSubmit(event) {
@@ -323,17 +330,6 @@
       return Object.fromEntries(new FormData(form).entries());
     }
 
-    function cambiarVista(viewName) {
-      state.activeView = viewName;
-
-      document.querySelectorAll(".tab-button").forEach(button => {
-        button.classList.toggle("active", button.dataset.view === viewName);
-      });
-
-      document.getElementById("usuarioView").classList.toggle("active", viewName === "usuario");
-      document.getElementById("adminView").classList.toggle("active", viewName === "admin");
-    }
-
     function setStatus(message, type) {
       const visibleType = ["success", "error", "info"].includes(type) ? type : "";
       elements.statusBox.className = `status ${visibleType}`;
@@ -341,8 +337,14 @@
     }
 
     function setLoading(isLoading) {
+      if (!elements.refreshButton) return;
+
       elements.refreshButton.disabled = isLoading;
       elements.refreshButton.textContent = isLoading ? "Cargando..." : "Actualizar datos";
+    }
+
+    function setText(element, value) {
+      if (element) element.textContent = value;
     }
 
     function formatearEstado(estado) {
@@ -377,21 +379,17 @@
         .replaceAll("'", "&#039;");
     }
 
-    document.querySelectorAll(".tab-button").forEach(button => {
-      button.addEventListener("click", () => cambiarVista(button.dataset.view));
-    });
-
-    elements.autosGrid.addEventListener("click", event => {
+    elements.autosGrid?.addEventListener("click", event => {
       const button = event.target.closest("[data-select-auto]");
       if (button) {
         seleccionarAuto(button.dataset.selectAuto);
       }
     });
 
-    elements.refreshButton.addEventListener("click", cargarDatos);
-    elements.alquilerForm.addEventListener("submit", handleAlquilerSubmit);
-    elements.autoForm.addEventListener("submit", handleAutoSubmit);
-    elements.clienteForm.addEventListener("submit", handleClienteSubmit);
-    elements.adminAlquilerForm.addEventListener("submit", handleAdminAlquilerSubmit);
+    elements.refreshButton?.addEventListener("click", cargarDatos);
+    elements.alquilerForm?.addEventListener("submit", handleAlquilerSubmit);
+    elements.autoForm?.addEventListener("submit", handleAutoSubmit);
+    elements.clienteForm?.addEventListener("submit", handleClienteSubmit);
+    elements.adminAlquilerForm?.addEventListener("submit", handleAdminAlquilerSubmit);
 
     cargarDatos();

@@ -85,6 +85,9 @@
 
     button,
     .tab-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border: 0;
       border-radius: 8px;
       background: var(--accent);
@@ -94,6 +97,7 @@
       font-weight: 750;
       min-height: 44px;
       padding: 0 18px;
+      text-decoration: none;
       transition: background 160ms ease, transform 160ms ease;
     }
 
