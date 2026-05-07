@@ -103,16 +103,22 @@
           "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
-      });
+      }, { expectJson: false });
     }
 
-    async function fetchJson(url, options = {}) {
+    async function fetchJson(url, options = {}, config = {}) {
+      const { expectJson = true } = config;
       const response = await fetchConTimeout(url, 10000, options);
       const contentType = response.headers.get("content-type") || "";
       const text = await response.text();
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}${text ? ` - ${text.slice(0, 140)}` : ""}`);
+      }
+
+      if (!expectJson) {
+        if (!text) return {};
+        return contentType.includes("application/json") ? JSON.parse(text) : { message: text };
       }
 
       if (!contentType.includes("application/json")) {
