@@ -3,6 +3,7 @@
 
     const state = {
       autos: [],
+      clientes: [],
       alquileres: [],
       selectedAuto: null
     };
@@ -22,7 +23,9 @@
       autoForm: document.getElementById("autoForm"),
       clienteForm: document.getElementById("clienteForm"),
       adminAlquilerForm: document.getElementById("adminAlquilerForm"),
+      adminClienteSelect: document.getElementById("adminClienteSelect"),
       autosTableBody: document.getElementById("autosTableBody"),
+      clientesTableBody: document.getElementById("clientesTableBody"),
       alquileresTableBody: document.getElementById("alquileresTableBody")
     };
 
@@ -41,6 +44,13 @@
         state.autos = autos;
 
         try {
+          state.clientes = await apiGet("clientes");
+        } catch (error) {
+          state.clientes = [];
+          console.warn("No se pudo cargar clientes:", error);
+        }
+
+        try {
           state.alquileres = await apiGet("alquileres");
         } catch (error) {
           state.alquileres = [];
@@ -52,6 +62,7 @@
       } catch (error) {
         console.error("ERROR:", error);
         state.autos = [];
+        state.clientes = [];
         state.alquileres = [];
         render();
         setStatus(error.message || "Error al cargar datos.", "error");
@@ -136,7 +147,9 @@
     function render() {
       pintarResumen();
       pintarAutosUsuario();
+      pintarClientesSelect();
       pintarAutosTabla();
+      pintarClientesTabla();
       pintarAlquileresTabla();
       pintarSeleccion();
     }
@@ -224,6 +237,44 @@
       `).join("");
     }
 
+    function pintarClientesSelect() {
+      if (!elements.adminClienteSelect) return;
+
+      if (!state.clientes.length) {
+        elements.adminClienteSelect.innerHTML = '<option value="">Sin clientes cargados</option>';
+        return;
+      }
+
+      elements.adminClienteSelect.innerHTML = [
+        '<option value="">Seleccioná un cliente</option>',
+        ...state.clientes.map(cliente => `
+          <option value="${escapeHTML(cliente.id_cliente ?? "")}">
+            #${escapeHTML(cliente.id_cliente ?? "-")} - ${escapeHTML(nombreCompletoCliente(cliente))}
+          </option>
+        `)
+      ].join("");
+    }
+
+    function pintarClientesTabla() {
+      if (!elements.clientesTableBody) return;
+
+      if (!state.clientes.length) {
+        elements.clientesTableBody.innerHTML = '<tr><td colspan="6">Sin clientes publicados o endpoint pendiente.</td></tr>';
+        return;
+      }
+
+      elements.clientesTableBody.innerHTML = state.clientes.map(cliente => `
+        <tr>
+          <td>#${escapeHTML(cliente.id_cliente ?? "-")}</td>
+          <td>${escapeHTML(cliente.nombre || "-")}</td>
+          <td>${escapeHTML(cliente.apellido || "-")}</td>
+          <td>${escapeHTML(cliente.dni || "-")}</td>
+          <td>${escapeHTML(cliente.email || "-")}</td>
+          <td>${escapeHTML(cliente.telefono || "-")}</td>
+        </tr>
+      `).join("");
+    }
+
     function pintarAlquileresTabla() {
       if (!elements.alquileresTableBody) return;
 
@@ -235,7 +286,7 @@
       elements.alquileresTableBody.innerHTML = state.alquileres.map(alquiler => `
         <tr>
           <td>#${escapeHTML(alquiler.id_alquiler ?? "-")}</td>
-          <td>${escapeHTML(alquiler.id_cliente ?? "-")}</td>
+          <td>${escapeHTML(formatearClienteAlquiler(alquiler.id_cliente))}</td>
           <td>${escapeHTML(alquiler.id_auto ?? "-")}</td>
           <td>${formatearFecha(alquiler.fecha_inicio)}</td>
           <td>${formatearFecha(alquiler.fecha_devolucion_prevista)}</td>
@@ -356,6 +407,16 @@
       const date = new Date(value);
       if (Number.isNaN(date.getTime())) return escapeHTML(value);
       return date.toLocaleDateString("es-AR");
+    }
+
+    function formatearClienteAlquiler(idCliente) {
+      const cliente = state.clientes.find(item => String(item.id_cliente) === String(idCliente));
+      if (!cliente) return idCliente ?? "-";
+      return `#${cliente.id_cliente} - ${nombreCompletoCliente(cliente)}`;
+    }
+
+    function nombreCompletoCliente(cliente) {
+      return [cliente.nombre, cliente.apellido].filter(Boolean).join(" ") || "Cliente sin nombre";
     }
 
     function formatearErrorFetch(error) {

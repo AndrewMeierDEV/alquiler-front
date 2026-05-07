@@ -124,8 +124,10 @@
           <form id="adminAlquilerForm" class="form-grid">
             <div class="form-grid two">
               <label>
-                ID cliente
-                <input name="id_cliente" type="number" min="1" required>
+                Cliente
+                <select id="adminClienteSelect" name="id_cliente" required>
+                  <option value="">Cargando clientes...</option>
+                </select>
               </label>
               <label>
                 ID auto
@@ -175,6 +177,30 @@
               </tr>
             </thead>
             <tbody id="autosTableBody"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel table-panel">
+        <div class="section-head">
+          <div>
+            <h3>Clientes</h3>
+            <p>Clientes disponibles para asociar a un alquiler.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+              </tr>
+            </thead>
+            <tbody id="clientesTableBody"></tbody>
           </table>
         </div>
       </article>
